@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>조영진 — 모바일 보안 엔지니어</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0b;
+            --bg-secondary: #111113;
+            --bg-card: #18181b;
+            --bg-card-hover: #1e1e22;
+            --text-primary: #f0f0f2;
+            --text-secondary: #a0a0a8;
+            --text-muted: #6b6b75;
+            --accent: #3b82f6;
+            --accent-dim: #1d4ed8;
+            --accent-glow: rgba(59, 130, 246, 0.15);
+            --border: #2a2a2e;
+            --border-subtle: #1f1f23;
+            --tag-bg: #1a1a2e;
+            --tag-text: #7c8cf5;
+            --success: #22c55e;
+            --warning: #f59e0b;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; font-size: 15px; -webkit-font-smoothing: antialiased; }
+
+        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(10,10,11,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-subtle); padding: 0 2rem; }
+        nav .nav-inner { max-width: 1000px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 56px; }
+        nav .nav-name { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1.05rem; color: var(--text-primary); letter-spacing: -0.02em; }
+        nav .nav-links { display: flex; gap: 1.8rem; list-style: none; }
+        nav .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.82rem; font-weight: 400; letter-spacing: 0.03em; transition: color 0.2s; }
+        nav .nav-links a:hover { color: var(--text-primary); }
+
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 2rem; }
+        section { padding: 5rem 0; border-bottom: 1px solid var(--border-subtle); }
+        section:last-of-type { border-bottom: none; }
+
+        .hero { padding-top: 10rem; padding-bottom: 5rem; border-bottom: 1px solid var(--border-subtle); }
+        .hero-label { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1.2rem; }
+        .hero h1 { font-family: 'Outfit', sans-serif; font-size: clamp(2.5rem, 5vw, 3.8rem); font-weight: 800; line-height: 1.15; letter-spacing: -0.03em; margin-bottom: 0.3rem; }
+        .hero-tagline { font-size: 1.15rem; font-weight: 500; color: var(--text-secondary); margin-bottom: 1.8rem; line-height: 1.5; }
+        .hero-desc { font-size: 0.95rem; color: var(--text-muted); max-width: 680px; line-height: 1.8; }
+        .hero-contact { margin-top: 2.5rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+        .hero-contact a { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--text-secondary); text-decoration: none; padding: 0.5rem 1rem; border: 1px solid var(--border); border-radius: 6px; transition: all 0.2s; }
+        .hero-contact a:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-glow); }
+
+        .section-label { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.6rem; }
+        .section-title { font-family: 'Outfit', sans-serif; font-size: 1.8rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 3rem; }
+
+        .project-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; margin-bottom: 1.5rem; transition: background 0.2s, border-color 0.2s; }
+        .project-card:hover { background: var(--bg-card-hover); border-color: #333; }
+        .project-card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1rem; gap: 1rem; }
+        .project-card h3 { font-family: 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 600; letter-spacing: -0.01em; }
+        .project-card .period { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-muted); white-space: nowrap; padding-top: 0.2rem; }
+        .project-card .role { font-size: 0.82rem; color: var(--accent); margin-bottom: 0.8rem; font-weight: 500; }
+        .project-card .desc { font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 1.2rem; line-height: 1.7; }
+        .project-card ul { list-style: none; padding: 0; }
+        .project-card li { font-size: 0.85rem; color: var(--text-secondary); padding: 0.3rem 0; padding-left: 1rem; position: relative; line-height: 1.6; }
+        .project-card li::before { content: ''; position: absolute; left: 0; top: 0.65rem; width: 4px; height: 4px; background: var(--accent); border-radius: 50%; }
+
+        .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.2rem; }
+        .tag { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--tag-text); background: var(--tag-bg); padding: 0.25rem 0.6rem; border-radius: 4px; letter-spacing: 0.02em; }
+
+        .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; }
+        .skills-category h4 { font-family: 'Outfit', sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.6rem; }
+        .skills-category .tags { margin-top: 0; }
+
+        .career-company { margin-bottom: 3rem; }
+        .career-company-header { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 0.5rem; }
+        .career-company-header h3 { font-family: 'Outfit', sans-serif; font-size: 1.3rem; font-weight: 700; }
+        .career-company-header .period { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--text-muted); }
+        .career-dept { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+        .career-timeline { list-style: none; padding: 0; border-left: 2px solid var(--border); padding-left: 1.5rem; }
+        .career-timeline li { font-size: 0.84rem; color: var(--text-secondary); padding: 0.4rem 0; position: relative; line-height: 1.6; }
+        .career-timeline li::before { content: ''; position: absolute; left: -1.65rem; top: 0.7rem; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; }
+        .career-timeline .timeline-period { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--text-muted); margin-left: 0.5rem; }
+
+        .career-product { padding: 1.5rem 0; border-top: 1px solid var(--border-subtle); }
+        .career-product-header { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 0.3rem; }
+        .career-product h4 { font-family: 'Outfit', sans-serif; font-size: 1.05rem; font-weight: 600; }
+        .career-product .period { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-muted); white-space: nowrap; }
+        .career-product .role-desc { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.8rem; }
+        .career-product ul { list-style: none; padding: 0; }
+        .career-product li { font-size: 0.84rem; color: var(--text-secondary); padding: 0.25rem 0; padding-left: 1rem; position: relative; line-height: 1.6; }
+        .career-product li::before { content: ''; position: absolute; left: 0; top: 0.6rem; width: 3px; height: 3px; background: var(--text-muted); border-radius: 50%; }
+        .career-product .link { display: inline-block; margin-top: 0.6rem; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+        .career-product .link:hover { opacity: 0.7; }
+        .career-product-content { display: flex; gap: 2rem; align-items: flex-start; }
+        .career-product-text { flex: 1; }
+        .career-product-screenshots { display: flex; gap: 0.6rem; flex-shrink: 0; width: 420px; }
+        .career-product-screenshots.single { width: 140px; }
+        .career-product-screenshots img { flex: 1; width: 0; height: auto; border-radius: 10px; border: 1px solid var(--border); display: block; }
+
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 3rem; }
+        .stat { text-align: center; padding: 1.5rem 1rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; }
+        .stat-value { font-family: 'Outfit', sans-serif; font-size: 2rem; font-weight: 800; color: var(--accent); letter-spacing: -0.03em; }
+        .stat-label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.3rem; }
+
+        footer { padding: 3rem 0; text-align: center; color: var(--text-muted); font-size: 0.78rem; }
+
+        @media (max-width: 640px) {
+            .container { padding: 0 1.2rem; }
+            nav { padding: 0 1.2rem; }
+            nav .nav-links { gap: 1rem; }
+            nav .nav-links a { font-size: 0.75rem; }
+            .hero { padding-top: 7rem; }
+            .project-card-header { flex-direction: column; gap: 0.3rem; }
+            .career-product-header { flex-direction: column; gap: 0.2rem; }
+            .stats { grid-template-columns: repeat(2, 1fr); }
+            .hero-contact { flex-direction: column; }
+            .hero-contact a { text-align: center; }
+            .skills-grid { grid-template-columns: 1fr; }
+            .career-product-content { flex-direction: column-reverse; gap: 1rem; }
+            .career-product-screenshots { width: 100%; }
+        }
+
+        @media print {
+            * { color: #111 !important; background: white !important; border-color: #ddd !important; box-shadow: none !important; }
+            nav { display: none !important; }
+            body { font-size: 11pt; line-height: 1.5; }
+            .hero { padding-top: 0; padding-bottom: 1.5rem; }
+            .hero-label { color: #666 !important; }
+            .hero h1 { font-size: 22pt; }
+            section { padding: 1.5rem 0; page-break-inside: avoid; }
+            .project-card { border: 1px solid #ddd; padding: 1rem; margin-bottom: 0.8rem; page-break-inside: avoid; }
+            .stat { border: 1px solid #ddd; padding: 0.8rem; }
+            .stat-value { color: #333 !important; }
+            .tag { border: 1px solid #ccc; background: #f5f5f5 !important; color: #333 !important; }
+            .hero-contact a { border: 1px solid #ccc; color: #333 !important; }
+            a { text-decoration: none; }
+            footer { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-inner">
+        <span class="nav-name">조영진</span>
+        <ul class="nav-links">
+            <li><a href="#skills">기술 스택</a></li>
+            <li><a href="#highlights">프로젝트</a></li>
+            <li><a href="#career">경력</a></li>
+            <li><a href="#projects">사이드 프로젝트</a></li>
+            <li><a href="#contact">연락처</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- ★ SECURITY HERO -->
+<div class="container">
+    <div class="hero">
+        <div class="hero-label">Mobile Security Engineer · 9 Years</div>
+        <h1>조영진</h1>
+        <p class="hero-tagline">9년 차 모바일 보안 엔지니어. 보안 SDK 개발부터 AI 보안 위협 탐지까지.</p>
+        <p class="hero-desc">
+            Android/iOS 보안 SDK를 9년간 개발·운영하면서, AI로 보안 위협(딥페이크, 보이스피싱, 악성앱)을 탐지하는 모델을 직접 개발하고 서비스에 적용했다. Frida, Ghidra, jadx 등을 활용한 리버스 엔지니어링과 공격 시뮬레이션(FakeCall PoC, BankingTrojan PoC)을 통해 방어 로직을 검증해왔다. 6인 팀 앱 개발 리드로 모델 응용 전략과 아키텍처 의사결정을 주도했고, 보이스피싱·악성앱 탐지에서는 전체 리드를 맡았다. 50만 다운로드 B2C 앱을 설계·개발·운영했고, 로컬 기반 서비스를 클라우드 아키텍처로 전환한 경험이 있다. 현재는 AI 기반 악성앱 탐지 모델을 설계·개발하며, MLflow를 활용한 MLOps 파이프라인을 구축·운영 중이다.
+        </p>
+        <div class="hero-contact">
+            <a href="mailto:yjcho9317@gmail.com">yjcho9317@gmail.com</a>
+            <a href="https://github.com/yjcho9317" target="_blank">GitHub</a>
+            <a href="https://yjcho9317.tistory.com/" target="_blank">Tistory</a>
+            <a href="https://velog.io/@yjcho9317" target="_blank">Velog</a>
+            <a href="https://www.linkedin.com/in/%EC%98%81%EC%A7%84-%EC%A1%B0-a3ba4b31a/" target="_blank">LinkedIn</a>
+        </div>
+    </div>
+</div>
+
+<!-- ★ SECURITY STATS -->
+<div class="container">
+    <section>
+        <div class="stats">
+            <div class="stat"><div class="stat-value">9년</div><div class="stat-label">모바일 보안 SDK 개발</div></div>
+            <div class="stat"><div class="stat-value">95%</div><div class="stat-label">딥페이크 탐지 정확도</div></div>
+            <div class="stat"><div class="stat-value">3개</div><div class="stat-label">AI 보안 프로젝트 리드</div></div>
+            <div class="stat"><div class="stat-value">50만+</div><div class="stat-label">B2C 앱 다운로드</div></div>
+        </div>
+    </section>
+</div>
+
+<!-- ★ SECURITY SKILLS ORDER: Security first -->
+<div class="container">
+    <section id="skills">
+        <div class="section-label">Tech Stack</div>
+        <h2 class="section-title">기술 스택</h2>
+        <div class="skills-grid">
+            <div class="skills-category">
+                <h4>Security & Reversing</h4>
+                <div class="tags">
+                    <span class="tag">Frida</span><span class="tag">Ghidra</span><span class="tag">jadx</span><span class="tag">apktool</span><span class="tag">루팅/탈옥 탐지</span><span class="tag">난독화 분석</span>
+                </div>
+            </div>
+            <div class="skills-category">
+                <h4>Mobile (Android / iOS)</h4>
+                <div class="tags">
+                    <span class="tag">Android SDK</span><span class="tag">Android NDK</span><span class="tag">Kotlin</span><span class="tag">Java</span><span class="tag">C++</span><span class="tag">JNI</span><span class="tag">iOS SDK</span><span class="tag">Objective-C</span>
+                </div>
+            </div>
+            <div class="skills-category">
+                <h4>AI / ML</h4>
+                <div class="tags">
+                    <span class="tag">Python</span><span class="tag">PyTorch</span><span class="tag">KoBERT</span><span class="tag">MLflow</span><span class="tag">ML Kit</span>
+                </div>
+            </div>
+            <div class="skills-category">
+                <h4>Architecture & DevOps</h4>
+                <div class="tags">
+                    <span class="tag">MVVM</span><span class="tag">Coroutines + Flow</span><span class="tag">Room</span><span class="tag">Hilt</span><span class="tag">Firebase</span><span class="tag">Jenkins</span><span class="tag">Git</span>
+                </div>
+            </div>
+            <div class="skills-category">
+                <h4>Others</h4>
+                <div class="tags">
+                    <span class="tag">TypeScript</span><span class="tag">Node.js</span><span class="tag">JavaScript</span><span class="tag">macOS DriverKit</span>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- ★ SECURITY PROJECT ORDER: mVaccine → 딥페이크 → 보이스피싱 → 악성앱 → PoC → 라온모바일 → 클라우드 -->
+<div class="container">
+    <section id="highlights">
+        <div class="section-label">Key Projects</div>
+        <h2 class="section-title">주요 프로젝트</h2>
+
+        <!-- mVaccine (동일 내용) -->
+        <div class="project-card">
+            <div class="project-card-header">
+                <h3>TouchEn mVaccine SDK/APP 개발 및 운영</h3>
+                <span class="period">2019.04 — 현재</span>
+            </div>
+            <div class="role">메인 담당 (Android/iOS SDK, App) · 라온시큐어</div>
+            <p class="desc">금융·공공기관에 납품하는 모바일 보안 SDK. 다양한 단말 환경에서 안정적으로 동작해야 하는 제품 특성상, 코드 품질·구조 개선과 성능 안정성이 핵심 과제였다.</p>
+            <div class="career-product-content">
+                <div class="career-product-text">
+                    <ul>
+                        <li>Magisk/RootHide 등 진화하는 루팅 기법 연구·분석 및 탐지 기능 개발. Frida를 활용한 우회 테스트로 탐지 로직 검증.</li>
+                        <li>경쟁사 보안 앱 리버스 엔지니어링(jadx, Ghidra)을 통한 탐지 로직 연구·벤치마킹.</li>
+                        <li>iOS 탈옥 탐지 기법 연구 및 탐지 모듈 개발.</li>
+                        <li>원격 탐지: 시스템, KNOX 등의 보안 정책(SandBox 등)을 우회하여 탐지하는 방법 개발.</li>
+                        <li>FakeCall, BankingTrojan 등 실제 공격 기법을 PoC로 구현하여 방어 로직 검증.</li>
+                        <li>보이스피싱 악성앱 실시간 탐지 기능 개발.</li>
+                        <li>NDK/JNI 기반 네이티브 모듈 개발. 시스템 레벨 탐지 로직 구현.</li>
+                        <li>Java→Kotlin 마이그레이션으로 코드 가독성과 유지보수성 향상.</li>
+                        <li>전체 아키텍처를 MVVM으로 리팩토링하여 테스트 가능성과 확장성 확보.</li>
+                        <li>WorkManager·Coroutines 기반 비동기·병렬 처리 설계. 초기 빈번했던 ANR과 메모리 릭을 JNI 레벨까지 추적·해결하여 현재 안정화.</li>
+                        <li>Unit Test 기반 SDK 품질 관리. Jenkins CI/CD를 통한 빌드·배포 자동화.</li>
+                        <li>Firebase 도입으로 원격 로그 수집·분석 체계 구축, 버그 대응 시간 단축.</li>
+                        <li>다양한 단말·OS 버전 환경에서의 호환성 대응.</li>
+                        <li>URL Scheme 기반 앱-웹 간 통신 기능 개발.</li>
+                        <li>플레이스토어 배포 및 업데이트 운영.</li>
+                    </ul>
+                    <div class="tags">
+                        <span class="tag">Android SDK</span><span class="tag">Android NDK</span><span class="tag">iOS SDK</span><span class="tag">Kotlin</span><span class="tag">Coroutines</span><span class="tag">Java</span><span class="tag">C++</span><span class="tag">Objective-C</span><span class="tag">MVVM</span><span class="tag">WorkManager</span><span class="tag">Firebase</span><span class="tag">Frida</span><span class="tag">Ghidra</span><span class="tag">jadx</span><span class="tag">Jenkins</span>
+                    </div>
+                    <a class="link" href="https://play.google.com/store/apps/details?id=com.TouchEn.mVaccine.webs" target="_blank">→ Google Play</a>
+                </div>
+                <div class="career-product-screenshots">
+                    <img src="images/mVaccine_main.jpg" alt="TouchEn mVaccine 메인">
+                    <img src="images/mVaccine_list.png" alt="TouchEn mVaccine 탐지 결과">
+                    <img src="images/mVaccine_result.png" alt="TouchEn mVaccine 치료 완료">
+                </div>
+            </div>
+        </div>
+
+        <!-- ★ 보안에서는 AI 프로젝트가 먼저 -->
+        <div class="project-card">
+            <div class="project-card-header">
+                <h3>AI 기반 딥페이크 영상 탐지</h3>
+                <span class="period">2024.04 — 2024.12</span>
+            </div>
+            <div class="role">앱 개발 리드 / 모델 개발 서브 (6인 팀) · 라온시큐어</div>
+            <p class="desc">오픈소스 기반 딥페이크 탐지 모델을 모바일 보안 서비스에 응용. 앱 개발을 메인으로, 모델 추가 학습·튜닝을 서브로 담당.</p>
+            <ul>
+                <li>기존 모델의 동양인 탐지율 한계 확인, 직접 데이터 수집 후 추가 학습하여 정확도 95% 달성.</li>
+                <li>모바일 환경에서의 온디바이스 실시간 탐지를 위해 모델 양자화(Quantization) 연구 수행. 추론 속도 및 MediaProjection 화질 제약으로 실시간 탐지 불가 판단, 클라우드 기반 탐지 아키텍처로 전환 결정.</li>
+                <li>라온 모바일 시큐리티 앱(50만 다운로드)에 탑재.</li>
+            </ul>
+            <div class="tags">
+                <span class="tag">Android SDK</span><span class="tag">Kotlin</span><span class="tag">Python</span><span class="tag">PyTorch</span><span class="tag">i3d</span><span class="tag">ResNet</span>
+            </div>
+        </div>
+
+        <div class="project-card">
+            <div class="project-card-header">
+                <h3>AI 기반 보이스피싱 탐지 연구</h3>
+                <span class="period">2025.09 — 2025.12</span>
+            </div>
+            <div class="role">전체/모델 개발 리드 (3인 팀) · 라온시큐어</div>
+            <p class="desc">보이스피싱 통화를 AI로 실시간 탐지하는 연구. Recall 99.34%를 달성했으나 실서비스 투입 불가 판단.</p>
+            <ul>
+                <li>KoBERT 기반 모델로 Recall 99.34% 달성. FP Rate 22%로 실서비스 적용 시 사용자 경험을 저해할 수준이라 판단, 제품화 보류.</li>
+                <li>후속 방향으로 정상 대화 데이터 보강 및 Hard Negative Mining 전략을 제안.</li>
+            </ul>
+            <div class="tags">
+                <span class="tag">KoBERT</span><span class="tag">Python</span><span class="tag">NLP</span>
+            </div>
+        </div>
+
+        <div class="project-card">
+            <div class="project-card-header">
+                <h3>AI 기반 악성앱 탐지</h3>
+                <span class="period">2026.02 — 현재</span>
+            </div>
+            <div class="role">전체/모델 개발 리드 · 라온시큐어</div>
+            <p class="desc">기존 패턴 기반 악성앱 탐지의 한계를 넘어서기 위해, ML 모델 기반 탐지 시스템을 설계·개발 중.</p>
+            <ul>
+                <li>APK 정적 분석 기반 특징 추출 파이프라인 설계 및 ML 모델 학습 아키텍처 구축.</li>
+                <li>MLflow 기반 실험 추적, 모델 버전 관리, 성능 비교 MLOps 파이프라인 구축·운영 중.</li>
+            </ul>
+            <div class="tags">
+                <span class="tag">Python</span><span class="tag">PyTorch</span><span class="tag">MLflow</span><span class="tag">Android</span>
+            </div>
+        </div>
+
+        <div class="project-card">
+            <div class="project-card-header">
+                <h3>라온 모바일 시큐리티 앱 개발 및 운영</h3>
+                <span class="period">2021.07 — 현재</span>
+            </div>
+            <div class="role">개발 및 운영, 주요 기술 의사결정 참여 · 라온시큐어</div>
+            <p class="desc">B2C 모바일 보안 서비스 앱. 10가지 이상 보안 기능을 하나의 앱에서 제공. 확장성을 고려해 현대적 Jetpack 스택을 도입.</p>
+            <div class="career-product-content">
+                <div class="career-product-text">
+                    <ul>
+                        <li>기능 설계 및 개발 주도. 신규 기능(딥페이크 탐지 등) 도입 시 기술 의사결정 담당.</li>
+                        <li>MVVM 리팩토링. 확장성을 고려해 Coroutines + Flow, Room, Hilt(DI)를 선제 도입.</li>
+                        <li>스미싱 문자 패턴화·정규화를 통한 실시간 탐지 기능 개발.</li>
+                        <li>Jetpack Compose 마이그레이션 계획 중.</li>
+                        <li>50만 다운로드, 1000명+ 평가, 평점 4.5 달성.</li>
+                        <li>플레이스토어 배포·업데이트 운영.</li>
+                    </ul>
+                    <div class="tags">
+                        <span class="tag">Kotlin</span><span class="tag">Coroutines + Flow</span><span class="tag">Room</span><span class="tag">Hilt</span><span class="tag">MVVM</span><span class="tag">Firebase</span>
+                    </div>
+                    <a class="link" href="https://play.google.com/store/apps/details?id=com.raonsecure.mobile.security" target="_blank">→ Google Play</a>
+                </div>
+                <div class="career-product-screenshots">
+                    <img src="images/raon_mobile_security.jpg" alt="라온 모바일 시큐리티 메인">
+                    <img src="images/raon_mobile_security_rank.jpg" alt="라온 모바일 시큐리티 딥페이크 탐지 기록">
+                    <img src="images/raon_mobile_security_complete.jpg" alt="라온 모바일 시큐리티 검사 완료">
+                </div>
+            </div>
+        </div>
+
+        <div class="project-card">
+            <div class="project-card-header">
+                <h3>클라우드 서비스 전환</h3>
+                <span class="period">2025.02 — 2025.10</span>
+            </div>
+            <div class="role">앱 개발 리드 (5인 팀) · 라온시큐어</div>
+            <p class="desc">기존 로컬 기반 보안 검사를 클라우드 기반으로 전환. 라이선스 기반 수익 구조에서 사용량 기반 과금 구조로의 전환을 목표로 설계.</p>
+            <ul>
+                <li>URL Scheme 기반 호출에서 중앙 서버 통한 데이터 전달 방식으로 통신 아키텍처 전환.</li>
+                <li>로컬 DB 용량 제약 제거로 검사 가능한 악성앱 탐지 패턴 2배 이상 확장 가능한 구조로 설계.</li>
+                <li>기존 CDN 기반 패턴 배포 대비 서버 비용 절감.</li>
+                <li>실제 사용 횟수 기반 집계 및 통계 수집 구조 설계.</li>
+            </ul>
+            <div class="tags">
+                <span class="tag">Android SDK</span><span class="tag">Java</span><span class="tag">Kotlin</span>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- 기타 프로젝트 (통일) -->
+<div class="container">
+    <section id="others">
+        <div class="section-label">Other Projects</div>
+        <h2 class="section-title">기타 프로젝트</h2>
+
+        <div class="project-card">
+            <div class="project-card-header">
+                <h3>TouchEn Transkey / mTranskey — Web SDK 개발 및 운영</h3>
+                <span class="period">2018.10 — 2021.07</span>
+            </div>
+            <div class="role">개발 및 운영 · 라온시큐어</div>
+            <p class="desc">웹 기반 보안 키보드 솔루션. 키 입력 보호 및 패턴 잠금 기능 제공. 금융·공공기관 대상.</p>
+            <ul>
+                <li>세션 미사용 통신 개발 (분산 시스템 및 보안 강화 목적).</li>
+                <li>반응형 웹 디자인 개발.</li>
+                <li>웹 접근성 심사 기준 준수 (공공·금융기관 장차법 요건).</li>
+                <li>RESTful API 설계·제공.</li>
+            </ul>
+            <div class="tags">
+                <span class="tag">JavaScript</span><span class="tag">Java Servlet</span><span class="tag">REST API</span>
+            </div>
+        </div>
+
+        <div class="project-card">
+            <div class="project-card-header">
+                <h3>TouchEn nxKey — macOS App 개발</h3>
+                <span class="period">2019.04 — 2021.09</span>
+            </div>
+            <div class="role">개발 · 라온시큐어</div>
+            <p class="desc">macOS용 보안 키보드 솔루션. 키 입력 후킹 및 보안 기능 제공.</p>
+            <ul>
+                <li>Hooking Daemon 개발: 키 입력을 실시간으로 후킹하여 보안 키보드 기능 구현.</li>
+                <li>macOS DriverKit을 사용하여 가상 키 발생 기능 개발.</li>
+            </ul>
+            <div class="tags">
+                <span class="tag">Objective-C</span><span class="tag">C++</span><span class="tag">macOS DriverKit</span>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- 경력 (통일) -->
+<div class="container">
+    <section id="career">
+        <div class="section-label">Career</div>
+        <h2 class="section-title">경력</h2>
+        <div class="career-company">
+            <div class="career-company-header">
+                <h3>라온시큐어</h3>
+                <span class="period">2018.04 — 현재</span>
+            </div>
+            <div class="career-dept">AI 연구 2팀</div>
+            <ul class="career-timeline">
+                <li>AI 기반 악성앱 탐지 — 전체/모델 개발 리드<span class="timeline-period">2026.02 — 현재</span></li>
+                <li>클라우드 서비스 전환 — 앱 개발 리드 (5인 팀)<span class="timeline-period">2025.02 — 2025.10</span></li>
+                <li>AI 보이스피싱 탐지 연구 — 전체/모델 개발 리드 (3인 팀)<span class="timeline-period">2025.09 — 2025.12</span></li>
+                <li>AI 딥페이크 탐지 — 앱 개발 리드 / 모델 서브 (6인 팀)<span class="timeline-period">2024.04 — 2024.12</span></li>
+                <li>라온 모바일 시큐리티 앱 설계·운영<span class="timeline-period">2021.07 — 현재</span></li>
+                <li>TouchEn mVaccine (Android/iOS SDK) 메인 담당<span class="timeline-period">2019.04 — 현재</span></li>
+                <li>TouchEn nxKey (macOS) 개발<span class="timeline-period">2019.04 — 2021.09</span></li>
+                <li>TouchEn Transkey / mTranskey (Web SDK) 개발·운영<span class="timeline-period">2018.10 — 2021.07</span></li>
+            </ul>
+        </div>
+    </section>
+</div>
+
+<!-- ★ SECURITY SIDE PROJECT ORDER: aiignore first -->
+<div class="container">
+    <section id="projects">
+        <div class="section-label">Side Projects</div>
+        <h2 class="section-title">사이드 프로젝트</h2>
+
+        <div class="career-product">
+            <div class="career-product-header">
+                <h4>aiignore-cli</h4>
+                <span class="period">1인 개발 · 오픈소스</span>
+            </div>
+            <p class="role-desc">AI 코딩 도구용 ignore 파일 생성 CLI · npm 배포</p>
+            <ul>
+                <li>.gitignore처럼 주요 AI 코딩 도구(Cursor, Claude Code 등)의 ignore 파일을 자동 생성.</li>
+                <li>바이브 코딩 시 private key 등 민감 정보가 AI에 노출되는 것을 방지. 보안 엔지니어 관점에서 개발.</li>
+            </ul>
+            <div class="tags">
+                <span class="tag">TypeScript</span><span class="tag">Node.js</span><span class="tag">npm</span><span class="tag">Security</span>
+            </div>
+            <a class="link" href="https://github.com/yjcho9317/aiignore-cli" target="_blank">→ GitHub</a>
+            <a class="link" href="https://www.npmjs.com/package/aiignore-cli" target="_blank">→ npm</a>
+        </div>
+
+        <div class="career-product">
+            <div class="career-product-header">
+                <h4>nworks</h4>
+                <span class="period">1인 개발 · 오픈소스</span>
+            </div>
+            <p class="role-desc">NAVER WORKS CLI & MCP Server · npm 배포</p>
+            <ul>
+                <li>NAVER WORKS API를 CLI와 MCP 서버로 래핑한 오픈소스 도구.</li>
+                <li>awesome-mcp-servers 등록(PR 머지), Glama AAA 인증 달성.</li>
+                <li>다국어 README(EN/KO/JA), npm 배포, Docker 지원.</li>
+            </ul>
+            <div class="tags">
+                <span class="tag">TypeScript</span><span class="tag">Node.js</span><span class="tag">MCP</span><span class="tag">npm</span>
+            </div>
+            <a class="link" href="https://github.com/yjcho9317/nworks" target="_blank">→ GitHub</a>
+            <a class="link" href="https://www.npmjs.com/package/nworks" target="_blank">→ npm</a>
+        </div>
+
+        <div class="career-product">
+            <div class="career-product-header">
+                <h4>셀카픽</h4>
+                <span class="period">1인 개발 · 배포 중</span>
+            </div>
+            <p class="role-desc">기획 · 개발 · 배포 · 운영 · ML Kit 기반 얼굴 유사도 분석 앱</p>
+            <div class="career-product-content">
+                <div class="career-product-text">
+                    <ul>
+                        <li>사진첩에서 유사한 셀카를 자동으로 묶어주고 베스트샷을 추천.</li>
+                        <li>ML Kit Face Detection으로 얼굴 특징 추출, 유사도 점수 산출.</li>
+                        <li>유사도 임계값 조정에 따른 정확도-오탐률 트레이드오프 경험.</li>
+                        <li>Google AdMob 광고 연동.</li>
+                        <li>기획부터 스토어 배포까지 단독 진행.</li>
+                    </ul>
+                    <div class="tags">
+                        <span class="tag">Kotlin</span><span class="tag">Coroutines</span><span class="tag">Jetpack Compose</span><span class="tag">MVVM</span><span class="tag">ML Kit</span><span class="tag">AdMob</span>
+                    </div>
+                    <a class="link" href="https://play.google.com/store/apps/details?id=com.yjcho.aiphotocleaner" target="_blank">→ Google Play</a>
+                </div>
+                <div class="career-product-screenshots">
+                    <img src="images/selcapic.png" alt="셀카픽 메인">
+                    <img src="images/selcapic_bestshot.png" alt="셀카픽 베스트샷">
+                    <img src="images/selcapic_result.png" alt="셀카픽 정리 완료">
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="container">
+    <section id="contact">
+        <div class="section-label">Contact</div>
+        <h2 class="section-title">연락처</h2>
+        <div class="hero-contact">
+            <a href="mailto:yjcho9317@gmail.com">yjcho9317@gmail.com</a>
+            <a href="https://github.com/yjcho9317" target="_blank">GitHub</a>
+            <a href="https://yjcho9317.tistory.com/" target="_blank">Tistory</a>
+            <a href="https://velog.io/@yjcho9317" target="_blank">Velog</a>
+            <a href="https://www.linkedin.com/in/%EC%98%81%EC%A7%84-%EC%A1%B0-a3ba4b31a/" target="_blank">LinkedIn</a>
+        </div>
+    </section>
+</div>
+
+<footer><div class="container">© 2026 조영진</div></footer>
+</body>
+</html>
