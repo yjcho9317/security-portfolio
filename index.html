@@ -1,140 +1,622 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" data-theme="security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>조영진 — 모바일 보안 엔지니어</title>
+    <title>조영진 — Mobile Security Engineer | AI-Driven Threat Detection</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        /* ============================================================
+           DESIGN SYSTEM TOKENS — Security Theme
+           ============================================================ */
+
         :root {
-            --bg-primary: #0a0a0b;
-            --bg-secondary: #111113;
-            --bg-card: #18181b;
-            --bg-card-hover: #1e1e22;
-            --text-primary: #f0f0f2;
-            --text-secondary: #a0a0a8;
-            --text-muted: #6b6b75;
-            --accent: #3b82f6;
-            --accent-dim: #1d4ed8;
-            --accent-glow: rgba(59, 130, 246, 0.15);
-            --border: #2a2a2e;
-            --border-subtle: #1f1f23;
-            --tag-bg: #1a1a2e;
-            --tag-text: #7c8cf5;
-            --success: #22c55e;
-            --warning: #f59e0b;
+            /* -- Backgrounds -- */
+            --bg-primary:       #0b0c10;
+            --bg-secondary:     #12131a;
+            --bg-card:          #181a24;
+            --bg-card-hover:    #1e2030;
+            --bg-elevated:      #222436;
+            --bg-code:          #0d0e14;
+
+            /* -- Text -- */
+            --text-primary:     #e8e9ed;
+            --text-secondary:   #9a9caa;
+            --text-muted:       #5c5e6e;
+            --text-inverse:     #0b0c10;
+
+            /* -- Borders -- */
+            --border:           #282a3a;
+            --border-subtle:    #1c1e2a;
+            --border-focus:     var(--accent);
+
+            /* -- Utility -- */
+            --success:          #34d399;
+            --warning:          #fbbf24;
+            --error:            #f87171;
+            --info:             #60a5fa;
+
+            /* -- Overlay -- */
+            --overlay:          rgba(11, 12, 16, 0.75);
+            --backdrop-blur:    20px;
+
+            /* -- Security Theme Accent -- */
+            --accent:           #36D8B7;
+            --accent-dim:       #1BA896;
+            --accent-bright:    #5EECD5;
+            --accent-glow:      rgba(54, 216, 183, 0.12);
+            --accent-surface:   rgba(54, 216, 183, 0.06);
+
+            --tag-bg:           #0f1f1c;
+            --tag-text:         #6ECFBE;
+            --tag-border:       rgba(54, 216, 183, 0.15);
+
+            --gradient-hero:    linear-gradient(
+                135deg,
+                rgba(54, 216, 183, 0.06) 0%,
+                rgba(54, 216, 183, 0.02) 30%,
+                transparent 60%
+            );
+
+            /* -- Font Families -- */
+            --font-heading:     'Outfit', sans-serif;
+            --font-body:        'Noto Sans KR', sans-serif;
+            --font-mono:        'JetBrains Mono', monospace;
+
+            /* -- Font Sizes -- */
+            --text-xs:          0.68rem;
+            --text-sm:          0.78rem;
+            --text-base:        0.88rem;
+            --text-md:          0.95rem;
+            --text-lg:          1.15rem;
+            --text-xl:          1.4rem;
+            --text-2xl:         1.8rem;
+            --text-hero:        clamp(2.5rem, 5vw, 3.8rem);
+
+            /* -- Font Weights -- */
+            --weight-light:     300;
+            --weight-regular:   400;
+            --weight-medium:    500;
+            --weight-semibold:  600;
+            --weight-bold:      700;
+            --weight-black:     800;
+
+            /* -- Line Heights -- */
+            --leading-tight:    1.15;
+            --leading-snug:     1.4;
+            --leading-normal:   1.7;
+            --leading-relaxed:  1.8;
+
+            /* -- Letter Spacing -- */
+            --tracking-tight:   -0.03em;
+            --tracking-normal:  -0.01em;
+            --tracking-wide:    0.03em;
+            --tracking-wider:   0.12em;
+            --tracking-widest:  0.15em;
+
+            /* -- Spacing Scale (4px base) -- */
+            --space-1:          0.25rem;
+            --space-2:          0.5rem;
+            --space-3:          0.75rem;
+            --space-4:          1rem;
+            --space-6:          1.5rem;
+            --space-8:          2rem;
+            --space-10:         2.5rem;
+            --space-12:         3rem;
+            --space-16:         4rem;
+            --space-20:         5rem;
+
+            /* -- Layout -- */
+            --max-width:        1000px;
+            --nav-height:       56px;
+            --border-radius-sm: 4px;
+            --border-radius-md: 8px;
+            --border-radius-lg: 12px;
+            --border-radius-xl: 16px;
         }
+
+        /* ============================================================
+           RESET & BASE
+           ============================================================ */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
-        body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; font-size: 15px; -webkit-font-smoothing: antialiased; }
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: var(--leading-normal);
+            font-size: 15px;
+            -webkit-font-smoothing: antialiased;
+        }
 
-        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(10,10,11,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-subtle); padding: 0 2rem; }
-        nav .nav-inner { max-width: 1000px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 56px; }
-        nav .nav-name { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1.05rem; color: var(--text-primary); letter-spacing: -0.02em; }
+        /* ============================================================
+           NAVIGATION
+           ============================================================ */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: var(--overlay);
+            backdrop-filter: blur(var(--backdrop-blur));
+            -webkit-backdrop-filter: blur(var(--backdrop-blur));
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 0 var(--space-8);
+        }
+        nav .nav-inner {
+            max-width: var(--max-width); margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+            height: var(--nav-height);
+        }
+        nav .nav-name {
+            font-family: var(--font-heading); font-weight: var(--weight-bold);
+            font-size: 1.05rem; color: var(--text-primary); letter-spacing: -0.02em;
+        }
         nav .nav-links { display: flex; gap: 1.8rem; list-style: none; }
-        nav .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.82rem; font-weight: 400; letter-spacing: 0.03em; transition: color 0.2s; }
+        nav .nav-links a {
+            position: relative;
+            color: var(--text-muted); text-decoration: none;
+            font-size: 0.82rem; font-weight: var(--weight-regular);
+            letter-spacing: var(--tracking-wide); transition: color 0.2s;
+        }
         nav .nav-links a:hover { color: var(--text-primary); }
 
-        .container { max-width: 1000px; margin: 0 auto; padding: 0 2rem; }
-        section { padding: 5rem 0; border-bottom: 1px solid var(--border-subtle); }
+        /* Nav link underline slide animation */
+        nav .nav-links a::after {
+            content: '';
+            position: absolute; bottom: -2px; left: 0;
+            width: 0; height: 1px;
+            background: var(--accent);
+            transition: width 0.25s ease-out;
+        }
+        nav .nav-links a:hover::after { width: 100%; }
+
+        /* ============================================================
+           LAYOUT
+           ============================================================ */
+        .container { max-width: var(--max-width); margin: 0 auto; padding: 0 var(--space-8); }
+        section { padding: var(--space-20) 0; border-bottom: 1px solid var(--border-subtle); }
         section:last-of-type { border-bottom: none; }
 
-        .hero { padding-top: 10rem; padding-bottom: 5rem; border-bottom: 1px solid var(--border-subtle); }
-        .hero-label { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1.2rem; }
-        .hero h1 { font-family: 'Outfit', sans-serif; font-size: clamp(2.5rem, 5vw, 3.8rem); font-weight: 800; line-height: 1.15; letter-spacing: -0.03em; margin-bottom: 0.3rem; }
-        .hero-tagline { font-size: 1.15rem; font-weight: 500; color: var(--text-secondary); margin-bottom: 1.8rem; line-height: 1.5; }
-        .hero-desc { font-size: 0.95rem; color: var(--text-muted); max-width: 680px; line-height: 1.8; }
-        .hero-contact { margin-top: 2.5rem; display: flex; gap: 1rem; flex-wrap: wrap; }
-        .hero-contact a { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--text-secondary); text-decoration: none; padding: 0.5rem 1rem; border: 1px solid var(--border); border-radius: 6px; transition: all 0.2s; }
-        .hero-contact a:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-glow); }
+        /* ============================================================
+           HERO
+           ============================================================ */
+        .hero {
+            position: relative;
+            padding-top: calc(var(--nav-height) + var(--space-16));
+            padding-bottom: var(--space-20);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        /* Gradient overlay */
+        .hero::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--gradient-hero);
+            pointer-events: none; z-index: 0;
+        }
+        .hero-label {
+            font-family: var(--font-mono); font-size: var(--text-sm);
+            color: var(--accent); letter-spacing: var(--tracking-wider);
+            text-transform: uppercase; margin-bottom: var(--space-6);
+            position: relative; z-index: 1;
+        }
+        /* Terminal prompt before label */
+        .hero-label::before {
+            content: '$ ';
+            color: var(--text-muted);
+            font-weight: var(--weight-regular);
+        }
+        .hero h1 {
+            font-family: var(--font-heading); font-size: var(--text-hero);
+            font-weight: var(--weight-black); line-height: var(--leading-tight);
+            letter-spacing: var(--tracking-tight); margin-bottom: 0.3rem;
+            position: relative; z-index: 1;
+        }
+        .hero-tagline {
+            font-size: var(--text-lg); font-weight: var(--weight-medium);
+            color: var(--text-secondary); margin-bottom: var(--space-8);
+            line-height: var(--leading-snug);
+            position: relative; z-index: 1;
+        }
+        .hero-desc {
+            font-size: var(--text-md); color: var(--text-muted);
+            max-width: 680px; line-height: var(--leading-relaxed);
+            position: relative; z-index: 1;
+        }
+        .hero-contact {
+            margin-top: var(--space-10); display: flex;
+            gap: var(--space-4); flex-wrap: wrap;
+            position: relative; z-index: 1;
+        }
+        .hero-contact a {
+            font-family: var(--font-mono); font-size: var(--text-sm);
+            color: var(--text-secondary); text-decoration: none;
+            padding: var(--space-2) var(--space-4);
+            border: 1px solid var(--border); border-radius: 6px;
+            transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+        }
+        .hero-contact a:hover {
+            color: var(--accent); border-color: var(--accent);
+            background: var(--accent-glow);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
 
-        .section-label { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.6rem; }
-        .section-title { font-family: 'Outfit', sans-serif; font-size: 1.8rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 3rem; }
+        /* ============================================================
+           SECTION HEADERS
+           ============================================================ */
+        .section-label {
+            font-family: var(--font-mono); font-size: 0.7rem;
+            color: var(--accent); letter-spacing: var(--tracking-widest);
+            text-transform: uppercase; margin-bottom: 0.6rem;
+        }
+        .section-title {
+            font-family: var(--font-heading); font-size: var(--text-2xl);
+            font-weight: var(--weight-bold); letter-spacing: var(--tracking-normal);
+            margin-bottom: var(--space-12);
+        }
 
-        .project-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; margin-bottom: 1.5rem; transition: background 0.2s, border-color 0.2s; }
-        .project-card:hover { background: var(--bg-card-hover); border-color: #333; }
-        .project-card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1rem; gap: 1rem; }
-        .project-card h3 { font-family: 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 600; letter-spacing: -0.01em; }
-        .project-card .period { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-muted); white-space: nowrap; padding-top: 0.2rem; }
-        .project-card .role { font-size: 0.82rem; color: var(--accent); margin-bottom: 0.8rem; font-weight: 500; }
-        .project-card .desc { font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 1.2rem; line-height: 1.7; }
+        /* ============================================================
+           PROJECT CARDS
+           ============================================================ */
+        .project-card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: var(--border-radius-lg); padding: var(--space-8);
+            margin-bottom: var(--space-6); position: relative;
+            transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+        }
+        /* Left accent bar: hidden by default, visible on hover */
+        .project-card::before {
+            content: '';
+            position: absolute; left: 0;
+            top: var(--space-8); bottom: var(--space-8);
+            width: 2px; background: var(--accent); border-radius: 1px;
+            opacity: 0; transition: opacity 0.25s ease;
+        }
+        .project-card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border);
+            transform: translateY(-1px);
+        }
+        .project-card:hover::before { opacity: 1; }
+
+        .project-card-header {
+            display: flex; align-items: flex-start;
+            justify-content: space-between; margin-bottom: var(--space-4); gap: var(--space-4);
+        }
+        .project-card h3 {
+            font-family: var(--font-heading); font-size: 1.2rem;
+            font-weight: var(--weight-semibold); letter-spacing: var(--tracking-normal);
+        }
+        .project-card .period {
+            font-family: var(--font-mono); font-size: 0.72rem;
+            color: var(--text-muted); white-space: nowrap; padding-top: 0.2rem;
+        }
+        .project-card .role {
+            font-size: 0.82rem; color: var(--accent);
+            margin-bottom: 0.8rem; font-weight: var(--weight-medium);
+        }
+        .project-card .desc {
+            font-size: var(--text-base); color: var(--text-secondary);
+            margin-bottom: var(--space-6); line-height: var(--leading-normal);
+        }
         .project-card ul { list-style: none; padding: 0; }
-        .project-card li { font-size: 0.85rem; color: var(--text-secondary); padding: 0.3rem 0; padding-left: 1rem; position: relative; line-height: 1.6; }
-        .project-card li::before { content: ''; position: absolute; left: 0; top: 0.65rem; width: 4px; height: 4px; background: var(--accent); border-radius: 50%; }
+        .project-card li {
+            font-size: 0.85rem; color: var(--text-secondary);
+            padding: 0.3rem 0; padding-left: var(--space-4);
+            position: relative; line-height: 1.6;
+        }
+        .project-card li::before {
+            content: ''; position: absolute; left: 0; top: 0.65rem;
+            width: 4px; height: 4px; background: var(--accent); border-radius: 50%;
+        }
 
-        .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.2rem; }
-        .tag { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--tag-text); background: var(--tag-bg); padding: 0.25rem 0.6rem; border-radius: 4px; letter-spacing: 0.02em; }
+        /* ============================================================
+           DECISION HIGHLIGHT
+           ============================================================ */
+        .decision-highlight {
+            background: var(--accent-surface);
+            border-left: 3px solid var(--accent);
+            padding: var(--space-3) var(--space-4);
+            border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
+            margin: var(--space-3) 0;
+            font-size: var(--text-base); color: var(--text-secondary);
+            line-height: var(--leading-normal);
+        }
+        .decision-highlight strong {
+            color: var(--accent-bright); font-weight: var(--weight-semibold);
+        }
 
-        .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; }
-        .skills-category h4 { font-family: 'Outfit', sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.6rem; }
+        /* ============================================================
+           TAGS (Badge style with border)
+           ============================================================ */
+        .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: var(--space-6); }
+        .tag {
+            font-family: var(--font-mono); font-size: var(--text-xs);
+            color: var(--tag-text); background: var(--tag-bg);
+            border: 1px solid var(--tag-border);
+            padding: 0.25rem 0.65rem; border-radius: var(--border-radius-sm);
+            letter-spacing: 0.02em;
+            transition: border-color 0.2s ease, background 0.2s ease;
+        }
+        .tag:hover {
+            border-color: var(--accent);
+            background: var(--accent-surface);
+        }
+
+        /* ============================================================
+           SKILLS GRID
+           ============================================================ */
+        .skills-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-6);
+        }
+        .skills-category h4 {
+            font-family: var(--font-heading); font-size: 0.9rem;
+            font-weight: var(--weight-semibold); color: var(--text-secondary);
+            margin-bottom: 0.6rem;
+        }
         .skills-category .tags { margin-top: 0; }
 
-        .career-company { margin-bottom: 3rem; }
-        .career-company-header { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 0.5rem; }
-        .career-company-header h3 { font-family: 'Outfit', sans-serif; font-size: 1.3rem; font-weight: 700; }
-        .career-company-header .period { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--text-muted); }
-        .career-dept { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1.5rem; }
-        .career-timeline { list-style: none; padding: 0; border-left: 2px solid var(--border); padding-left: 1.5rem; }
-        .career-timeline li { font-size: 0.84rem; color: var(--text-secondary); padding: 0.4rem 0; position: relative; line-height: 1.6; }
-        .career-timeline li::before { content: ''; position: absolute; left: -1.65rem; top: 0.7rem; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; }
-        .career-timeline .timeline-period { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--text-muted); margin-left: 0.5rem; }
+        /* ============================================================
+           CAREER
+           ============================================================ */
+        .career-company { margin-bottom: var(--space-12); }
+        .career-company-header {
+            display: flex; align-items: baseline; gap: var(--space-4); margin-bottom: var(--space-2);
+        }
+        .career-company-header h3 {
+            font-family: var(--font-heading); font-size: 1.3rem; font-weight: var(--weight-bold);
+        }
+        .career-company-header .period {
+            font-family: var(--font-mono); font-size: var(--text-sm); color: var(--text-muted);
+        }
+        .career-dept {
+            font-size: 0.82rem; color: var(--text-muted); margin-bottom: var(--space-6);
+        }
+        .career-timeline {
+            list-style: none; padding: 0;
+            border-left: 2px solid var(--border); padding-left: var(--space-6);
+        }
+        .career-timeline li {
+            font-size: 0.84rem; color: var(--text-secondary);
+            padding: 0.4rem 0; position: relative; line-height: 1.6;
+        }
+        .career-timeline li::before {
+            content: ''; position: absolute; left: -1.65rem; top: 0.7rem;
+            width: 8px; height: 8px; background: var(--accent); border-radius: 50%;
+        }
+        .career-timeline .timeline-period {
+            font-family: var(--font-mono); font-size: var(--text-xs);
+            color: var(--text-muted); margin-left: var(--space-2);
+        }
 
-        .career-product { padding: 1.5rem 0; border-top: 1px solid var(--border-subtle); }
-        .career-product-header { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 0.3rem; }
-        .career-product h4 { font-family: 'Outfit', sans-serif; font-size: 1.05rem; font-weight: 600; }
-        .career-product .period { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-muted); white-space: nowrap; }
-        .career-product .role-desc { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.8rem; }
+        /* ============================================================
+           CAREER PRODUCT (Side projects & sub-items)
+           ============================================================ */
+        .career-product {
+            padding: var(--space-6) 0; border-top: 1px solid var(--border-subtle);
+        }
+        .career-product-header {
+            display: flex; align-items: baseline;
+            justify-content: space-between; gap: var(--space-4); margin-bottom: 0.3rem;
+        }
+        .career-product h4 {
+            font-family: var(--font-heading); font-size: 1.05rem; font-weight: var(--weight-semibold);
+        }
+        .career-product .period {
+            font-family: var(--font-mono); font-size: 0.7rem;
+            color: var(--text-muted); white-space: nowrap;
+        }
+        .career-product .role-desc {
+            font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.8rem;
+        }
         .career-product ul { list-style: none; padding: 0; }
-        .career-product li { font-size: 0.84rem; color: var(--text-secondary); padding: 0.25rem 0; padding-left: 1rem; position: relative; line-height: 1.6; }
-        .career-product li::before { content: ''; position: absolute; left: 0; top: 0.6rem; width: 3px; height: 3px; background: var(--text-muted); border-radius: 50%; }
-        .career-product .link { display: inline-block; margin-top: 0.6rem; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+        .career-product li {
+            font-size: 0.84rem; color: var(--text-secondary);
+            padding: 0.25rem 0; padding-left: var(--space-4);
+            position: relative; line-height: 1.6;
+        }
+        .career-product li::before {
+            content: ''; position: absolute; left: 0; top: 0.6rem;
+            width: 3px; height: 3px; background: var(--text-muted); border-radius: 50%;
+        }
+        .career-product .link {
+            display: inline-block; margin-top: 0.6rem;
+            font-family: var(--font-mono); font-size: 0.72rem;
+            color: var(--accent); text-decoration: none; transition: opacity 0.2s;
+        }
         .career-product .link:hover { opacity: 0.7; }
-        .career-product-content { display: flex; gap: 2rem; align-items: flex-start; }
+        .career-product-content {
+            display: flex; gap: var(--space-8); align-items: flex-start;
+        }
         .career-product-text { flex: 1; }
-        .career-product-screenshots { display: flex; gap: 0.6rem; flex-shrink: 0; width: 420px; }
+        .career-product-screenshots {
+            display: flex; gap: 0.6rem; flex-shrink: 0; width: 420px;
+        }
         .career-product-screenshots.single { width: 140px; }
-        .career-product-screenshots img { flex: 1; width: 0; height: auto; border-radius: 10px; border: 1px solid var(--border); display: block; }
+        .career-product-screenshots img {
+            flex: 1; width: 0; height: auto;
+            border-radius: 10px; border: 1px solid var(--border); display: block;
+        }
 
-        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 3rem; }
-        .stat { text-align: center; padding: 1.5rem 1rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; }
-        .stat-value { font-family: 'Outfit', sans-serif; font-size: 2rem; font-weight: 800; color: var(--accent); letter-spacing: -0.03em; }
-        .stat-label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.3rem; }
+        /* ============================================================
+           STATS
+           ============================================================ */
+        .stats {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: var(--space-4); margin-bottom: var(--space-12);
+        }
+        .stat {
+            text-align: center; padding: var(--space-6) var(--space-4);
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: var(--border-radius-md);
+            transition: border-color 0.25s ease;
+        }
+        .stat:hover { border-color: var(--accent); }
+        .stat-value {
+            font-family: var(--font-heading); font-size: 2rem;
+            font-weight: var(--weight-black); color: var(--accent);
+            letter-spacing: var(--tracking-tight);
+            transition: color 0.2s ease;
+        }
+        .stat:hover .stat-value {
+            text-shadow: 0 0 24px var(--accent-glow);
+        }
+        .stat-label {
+            font-size: var(--text-sm); color: var(--text-muted); margin-top: var(--space-1);
+        }
 
-        footer { padding: 3rem 0; text-align: center; color: var(--text-muted); font-size: 0.78rem; }
+        /* ============================================================
+           FOOTER
+           ============================================================ */
+        footer {
+            padding: var(--space-12) 0; text-align: center;
+            color: var(--text-muted); font-size: var(--text-sm);
+        }
 
+        /* ============================================================
+           SCROLL FADE-IN ANIMATION
+           ============================================================ */
+        .fade-in {
+            opacity: 0; transform: translateY(12px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+        .fade-in.visible {
+            opacity: 1; transform: translateY(0);
+        }
+
+        /* ============================================================
+           ACCESSIBILITY: Focus visible
+           ============================================================ */
+        *:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+            border-radius: var(--border-radius-sm);
+        }
+
+        /* ============================================================
+           ACCESSIBILITY: Reduced motion
+           ============================================================ */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            .fade-in {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        /* ============================================================
+           RESPONSIVE: Tablet (640px+)
+           ============================================================ */
+        @media (min-width: 640px) {
+            .stats { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+            .skills-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+        }
+
+        /* ============================================================
+           RESPONSIVE: Desktop (1024px+)
+           ============================================================ */
+        @media (min-width: 1024px) {
+            .hero { padding-top: calc(var(--nav-height) + var(--space-20)); }
+        }
+
+        /* ============================================================
+           RESPONSIVE: Mobile overrides
+           ============================================================ */
         @media (max-width: 640px) {
             .container { padding: 0 1.2rem; }
             nav { padding: 0 1.2rem; }
-            nav .nav-links { gap: 1rem; }
+            nav .nav-links { gap: var(--space-4); }
             nav .nav-links a { font-size: 0.75rem; }
-            .hero { padding-top: 7rem; }
-            .project-card-header { flex-direction: column; gap: 0.3rem; }
-            .career-product-header { flex-direction: column; gap: 0.2rem; }
+            .hero { padding-top: calc(var(--nav-height) + var(--space-12)); }
+            .project-card-header { flex-direction: column; gap: var(--space-1); }
+            .career-product-header { flex-direction: column; gap: var(--space-1); }
             .stats { grid-template-columns: repeat(2, 1fr); }
             .hero-contact { flex-direction: column; }
             .hero-contact a { text-align: center; }
             .skills-grid { grid-template-columns: 1fr; }
-            .career-product-content { flex-direction: column-reverse; gap: 1rem; }
+            .career-product-content { flex-direction: column-reverse; gap: var(--space-4); }
             .career-product-screenshots { width: 100%; }
         }
 
+        /* ============================================================
+           PRINT STYLES
+           ============================================================ */
         @media print {
-            * { color: #111 !important; background: white !important; border-color: #ddd !important; box-shadow: none !important; }
+            :root {
+                --bg-primary:       #ffffff;
+                --bg-secondary:     #ffffff;
+                --bg-card:          #ffffff;
+                --text-primary:     #111111;
+                --text-secondary:   #444444;
+                --text-muted:       #777777;
+                --border:           #dddddd;
+                --border-subtle:    #eeeeee;
+            }
+
+            /* Security theme print accent */
+            [data-theme="security"] {
+                --accent:           #0f766e;
+                --accent-bright:    #0f766e;
+                --tag-bg:           #ecfdf5;
+                --tag-text:         #0f766e;
+                --tag-border:       #a7f3d0;
+            }
+
+            * {
+                box-shadow: none !important;
+                text-shadow: none !important;
+            }
+
+            body {
+                font-size: 11pt; line-height: 1.5;
+                color: var(--text-primary); background: white;
+            }
+
             nav { display: none !important; }
-            body { font-size: 11pt; line-height: 1.5; }
+
             .hero { padding-top: 0; padding-bottom: 1.5rem; }
-            .hero-label { color: #666 !important; }
+            .hero::before { display: none; }
             .hero h1 { font-size: 22pt; }
+
             section { padding: 1.5rem 0; page-break-inside: avoid; }
-            .project-card { border: 1px solid #ddd; padding: 1rem; margin-bottom: 0.8rem; page-break-inside: avoid; }
+
+            .project-card {
+                border: 1px solid #ddd; padding: 1rem;
+                margin-bottom: 0.8rem; page-break-inside: avoid;
+            }
+            .project-card::before { display: none; }
+            .project-card:hover { transform: none; }
+
             .stat { border: 1px solid #ddd; padding: 0.8rem; }
-            .stat-value { color: #333 !important; }
-            .tag { border: 1px solid #ccc; background: #f5f5f5 !important; color: #333 !important; }
-            .hero-contact a { border: 1px solid #ccc; color: #333 !important; }
-            a { text-decoration: none; }
+
+            .tag {
+                border: 1px solid var(--tag-border);
+                background: var(--tag-bg);
+                color: var(--tag-text);
+            }
+
+            .decision-highlight {
+                border-left-color: var(--accent);
+                background: #f8f9fa;
+            }
+
+            a { text-decoration: none; color: var(--text-primary); }
+
+            /* Show link URLs in print (except hero-contact which already shows text) */
+            a[href^="http"]:not(.hero-contact a)::after {
+                content: " (" attr(href) ")";
+                font-size: 8pt;
+                color: #999;
+            }
+
             footer { display: none; }
+            .fade-in { opacity: 1; transform: none; }
         }
     </style>
 </head>
@@ -146,24 +628,25 @@
         <ul class="nav-links">
             <li><a href="#skills">기술 스택</a></li>
             <li><a href="#highlights">프로젝트</a></li>
+            <li><a href="#others">기타</a></li>
             <li><a href="#career">경력</a></li>
-            <li><a href="#projects">사이드 프로젝트</a></li>
+            <li><a href="#education">학력</a></li>
             <li><a href="#contact">연락처</a></li>
         </ul>
     </div>
 </nav>
 
-<!-- ★ SECURITY HERO -->
+<!-- ★ HERO — 브랜딩 포지셔닝 반영 -->
 <div class="container">
     <div class="hero">
         <div class="hero-label">Mobile Security Engineer · 9 Years</div>
         <h1>조영진</h1>
-        <p class="hero-tagline">9년 차 모바일 보안 엔지니어. 보안 SDK 개발부터 AI 보안 위협 탐지까지.</p>
+        <p class="hero-tagline">보안 엔지니어 · 9년간 Android/iOS 보안 시스템 설계 및 AI 기반 위협 탐지 시스템 3건 리드.<br>AI를 활용한 보안에서, AI 자체를 지키는 보안으로 확장 중.</p>
         <p class="hero-desc">
-            Android/iOS 보안 SDK를 9년간 개발·운영하면서, AI로 보안 위협(딥페이크, 보이스피싱, 악성앱)을 탐지하는 모델을 직접 개발하고 서비스에 적용했다. Frida, Ghidra, jadx 등을 활용한 리버스 엔지니어링과 공격 시뮬레이션(FakeCall PoC, BankingTrojan PoC)을 통해 방어 로직을 검증해왔다. 6인 팀 앱 개발 리드로 모델 응용 전략과 아키텍처 의사결정을 주도했고, 보이스피싱·악성앱 탐지에서는 전체 리드를 맡았다. 50만 다운로드 B2C 앱을 설계·개발·운영했고, 로컬 기반 서비스를 클라우드 아키텍처로 전환한 경험이 있다. 현재는 AI 기반 악성앱 탐지 모델을 설계·개발하며, MLflow를 활용한 MLOps 파이프라인을 구축·운영 중이다.
+            Android/iOS 보안 SDK를 9년간 설계·운영하며, 디바이스 무결성 검증부터 AI 기반 위협 탐지(딥페이크, 보이스피싱, 악성앱)까지 보안 시스템 전체를 다뤘다. 모델 성능만이 아니라 오탐률·UX·비용 트레이드오프를 분석해 온디바이스 vs 클라우드 아키텍처 전환을 설계하고, 제품화 가부를 판단하는 기술 리드를 수행했다. 50만 다운로드 B2C 앱의 기술 방향을 설계했고, 로컬 기반 서비스를 클라우드 아키텍처로 전환 설계한 경험이 있다. 현재는 ML 기반 악성앱 탐지 시스템 설계와 MLOps 파이프라인 구축을 리드하며, MCP 서버를 직접 설계·배포해 에이전트 인프라를 만드는 쪽에 서 있다.
         </p>
         <div class="hero-contact">
-            <a href="mailto:yjcho9317@gmail.com">yjcho9317@gmail.com</a>
+            <a href="/cdn-cgi/l/email-protection#a8d1c2cbc0c7919b999fe8cfc5c9c1c486cbc7c5"><span class="__cf_email__" data-cfemail="40392a23282f7973717700272d21292c6e232f2d">[email&#160;protected]</span></a>
             <a href="https://github.com/yjcho9317" target="_blank">GitHub</a>
             <a href="https://yjcho9317.tistory.com/" target="_blank">Tistory</a>
             <a href="https://velog.io/@yjcho9317" target="_blank">Velog</a>
@@ -172,93 +655,147 @@
     </div>
 </div>
 
-<!-- ★ SECURITY STATS -->
+<!-- ★ STATS — 핵심 지표 -->
 <div class="container">
     <section>
         <div class="stats">
-            <div class="stat"><div class="stat-value">9년</div><div class="stat-label">모바일 보안 SDK 개발</div></div>
-            <div class="stat"><div class="stat-value">95%</div><div class="stat-label">딥페이크 탐지 정확도</div></div>
-            <div class="stat"><div class="stat-value">3개</div><div class="stat-label">AI 보안 프로젝트 리드</div></div>
-            <div class="stat"><div class="stat-value">50만+</div><div class="stat-label">B2C 앱 다운로드</div></div>
+            <div class="stat fade-in"><div class="stat-value">9년</div><div class="stat-label">모바일 보안 설계·운영</div></div>
+            <div class="stat fade-in"><div class="stat-value">3건</div><div class="stat-label">AI 탐지 시스템 리드</div></div>
+            <div class="stat fade-in"><div class="stat-value">50만+</div><div class="stat-label">B2C 앱 기술 리드</div></div>
+            <div class="stat fade-in"><div class="stat-value">4.5</div><div class="stat-label">Google Play 평점 (1000+ 평가)</div></div>
         </div>
     </section>
 </div>
 
-<!-- ★ SECURITY SKILLS ORDER: Security first -->
+<!-- ★ SKILLS — Security & AI 판단 역량 강조 -->
 <div class="container">
-    <section id="skills">
+    <section id="skills" class="fade-in">
         <div class="section-label">Tech Stack</div>
         <h2 class="section-title">기술 스택</h2>
         <div class="skills-grid">
             <div class="skills-category">
-                <h4>Security & Reversing</h4>
+                <h4>Security & Threat Analysis</h4>
                 <div class="tags">
-                    <span class="tag">Frida</span><span class="tag">Ghidra</span><span class="tag">jadx</span><span class="tag">apktool</span><span class="tag">루팅/탈옥 탐지</span><span class="tag">난독화 분석</span>
+                    <span class="tag">Frida</span><span class="tag">Ghidra</span><span class="tag">jadx</span><span class="tag">apktool</span><span class="tag">루팅/탈옥 탐지 설계</span><span class="tag">위협 모델링</span><span class="tag">공격 시뮬레이션(PoC)</span><span class="tag">OWASP Mobile Top 10</span>
                 </div>
             </div>
             <div class="skills-category">
-                <h4>Mobile (Android / iOS)</h4>
-                <div class="tags">
-                    <span class="tag">Android SDK</span><span class="tag">Android NDK</span><span class="tag">Kotlin</span><span class="tag">Java</span><span class="tag">C++</span><span class="tag">JNI</span><span class="tag">iOS SDK</span><span class="tag">Objective-C</span>
-                </div>
-            </div>
-            <div class="skills-category">
-                <h4>AI / ML</h4>
+                <h4>AI / ML for Security</h4>
                 <div class="tags">
                     <span class="tag">Python</span><span class="tag">PyTorch</span><span class="tag">KoBERT</span><span class="tag">MLflow</span><span class="tag">ML Kit</span>
                 </div>
             </div>
             <div class="skills-category">
-                <h4>Architecture & DevOps</h4>
+                <h4>Mobile Platform (Android / iOS)</h4>
                 <div class="tags">
-                    <span class="tag">MVVM</span><span class="tag">Coroutines + Flow</span><span class="tag">Room</span><span class="tag">Hilt</span><span class="tag">Firebase</span><span class="tag">Jenkins</span><span class="tag">Git</span>
+                    <span class="tag">Android SDK</span><span class="tag">Android NDK</span><span class="tag">Kotlin</span><span class="tag">Java</span><span class="tag">C++</span><span class="tag">JNI</span><span class="tag">iOS SDK</span><span class="tag">Objective-C</span>
                 </div>
             </div>
             <div class="skills-category">
-                <h4>Others</h4>
+                <h4>Architecture & DevOps</h4>
                 <div class="tags">
-                    <span class="tag">TypeScript</span><span class="tag">Node.js</span><span class="tag">JavaScript</span><span class="tag">macOS DriverKit</span>
+                    <span class="tag">MVVM</span><span class="tag">Coroutines + Flow</span><span class="tag">Room</span><span class="tag">Hilt</span><span class="tag">Firebase</span><span class="tag">Jenkins CI/CD</span><span class="tag">Git</span>
+                </div>
+            </div>
+            <div class="skills-category">
+                <h4>Agent Infrastructure</h4>
+                <div class="tags">
+                    <span class="tag">MCP Server</span><span class="tag">TypeScript</span><span class="tag">Node.js</span><span class="tag">npm 배포</span><span class="tag">Docker</span>
                 </div>
             </div>
         </div>
     </section>
 </div>
 
-<!-- ★ SECURITY PROJECT ORDER: mVaccine → 딥페이크 → 보이스피싱 → 악성앱 → PoC → 라온모바일 → 클라우드 -->
+<!-- ★ KEY PROJECTS — 판단력 먼저, 회사+사이드 통합 -->
 <div class="container">
-    <section id="highlights">
-        <div class="section-label">Key Projects</div>
-        <h2 class="section-title">주요 프로젝트</h2>
+    <section id="highlights" class="fade-in">
+        <div class="section-label">Projects</div>
+        <h2 class="section-title">프로젝트</h2>
 
-        <!-- mVaccine (동일 내용) -->
-        <div class="project-card">
+        <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 1.5rem; padding-left: 0.2rem; letter-spacing: -0.01em;">AI 보안 프로젝트</h3>
+
+        <!-- ★ 보이스피싱 — 판단력 최우선 배치 -->
+        <div class="project-card fade-in">
             <div class="project-card-header">
-                <h3>TouchEn mVaccine SDK/APP 개발 및 운영</h3>
+                <h3>AI 보이스피싱 탐지 — FP Rate 분석 기반 제품화 판단</h3>
+                <span class="period">2025.09 — 2025.12</span>
+            </div>
+            <div class="role">전체/모델 개발 리드 (3인 팀) · 라온시큐어</div>
+            <p class="desc">보이스피싱 통화를 AI로 실시간 탐지하는 연구. Recall 99.34% 달성했으나, 높은 Recall 자체가 과적합 시그널이었고 실서비스 품질에 미달하여 제품화를 보류했다.</p>
+            <div class="decision-highlight">
+                <strong>판단 근거:</strong> Recall 99.34%는 model robustness 관점에서 과적합으로 판단. FP Rate 22%(OOD 샘플에 대한 robustness 부족 — 정상 통화 약 5건 중 1건 오탐지). 실제 사용 시 체감 오탐률이 수치보다 더 높아 사용자 신뢰를 훼손할 수준으로 분석. 출시를 보류하고 후속 개선 전략(Hard Negative Mining, 정상 대화 합성 데이터 보강)을 수립.
+            </div>
+            <ul>
+                <li>KoBERT 기반 모델 아키텍처 설계 및 학습 파이프라인 구축.</li>
+                <li>"Recall이 높으면 출시"가 아닌, 과적합 여부와 체감 품질까지 검증하여 Go/No-Go를 판단한 경험.</li>
+            </ul>
+            <div class="tags">
+                <span class="tag">KoBERT</span><span class="tag">Python</span><span class="tag">NLP</span><span class="tag">Hard Negative Mining</span>
+            </div>
+        </div>
+
+        <!-- ★ 딥페이크 — 아키텍처 전환 -->
+        <div class="project-card fade-in">
+            <div class="project-card-header">
+                <h3>AI 딥페이크 탐지 — 온디바이스 vs 클라우드 아키텍처 전환 설계</h3>
+                <span class="period">2024.04 — 2024.12</span>
+            </div>
+            <div class="role">앱 개발 리드 / 모델 개발 서브 (6인 팀) · 라온시큐어</div>
+            <p class="desc">오픈소스 딥페이크 탐지 모델을 모바일 보안 서비스에 응용. 모델 성능·추론 속도·UX 트레이드오프를 분석해 아키텍처 전환을 설계했다.</p>
+            <div class="decision-highlight">
+                <strong>설계 판단:</strong> 기존 모델의 아시아권 탐지 한계(distribution shift)를 식별, 자체 데이터셋 구축(domain adaptation)으로 정확도 30%p 개선(95% 달성, 자체 테스트셋 기준). 모델 양자화(FP32→INT8) 후 온디바이스 추론 속도 및 MediaProjection 캡처 해상도 제약(최대 720p)을 측정 — 실시간 영상통화(30fps) 대비 처리율 부족으로 온디바이스 실시간 탐지 불가 판단. 정량적 근거를 기반으로 클라우드 비동기 아키텍처로 전환 설계하여 서비스 출시 일정 준수.
+            </div>
+            <ul>
+                <li><strong>서비스 흐름:</strong> 사용자가 영상 업로드 또는 URL(유튜브/SNS) 입력 → 클라우드 탐지 → 딥페이크 확률(%) 결과 제공.</li>
+                <li>50만 다운로드 B2C 앱(라온 모바일 시큐리티)에 탑재하여 서비스 출시.</li>
+            </ul>
+            <div class="tags">
+                <span class="tag">Android SDK</span><span class="tag">Kotlin</span><span class="tag">Python</span><span class="tag">PyTorch</span><span class="tag">i3d</span><span class="tag">ResNet</span><span class="tag">Quantization</span>
+            </div>
+        </div>
+
+        <!-- ★ 악성앱 — 현재 진행 -->
+        <div class="project-card fade-in">
+            <div class="project-card-header">
+                <h3>AI 악성앱 탐지 — ML 기반 탐지 시스템 설계</h3>
+                <span class="period">2026.02 — 현재</span>
+            </div>
+            <div class="role">전체/모델 개발 리드 · 라온시큐어</div>
+            <p class="desc">기존 패턴 기반 탐지의 한계(신종 악성앱 대응 지연, 패턴 DB 확장 비용, adversarial malware에 취약)를 넘어서기 위해 ML 모델 기반 탐지 시스템을 설계·리드 중.</p>
+            <ul>
+                <li>APK 정적 분석 기반 특징 추출 파이프라인 설계. 입력 → 특징 추출 → 모델 판단 → 결과 반환의 end-to-end 흐름 구축.</li>
+                <li>MLflow 기반 실험 추적·모델 버전 관리·성능 비교 MLOps 파이프라인 설계·운영.</li>
+                <li>패턴 기반과 ML 기반의 2-tier 아키텍처 — adversarial evasion에 대한 다층 방어 설계.</li>
+                <li>APK 정적 특징(권한, API 호출, 메타데이터) 기반 분류. 수만 건 규모 악성/정상 APK 데이터셋으로 학습.</li>
+            </ul>
+            <div class="tags">
+                <span class="tag">Python</span><span class="tag">PyTorch</span><span class="tag">MLflow</span><span class="tag">MLOps</span><span class="tag">Android</span>
+            </div>
+        </div>
+
+        <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 1.5rem; margin-top: 3rem; padding-left: 0.2rem; letter-spacing: -0.01em;">보안 앱 · SDK</h3>
+
+        <!-- mVaccine -->
+        <div class="project-card fade-in">
+            <div class="project-card-header">
+                <h3>TouchEn mVaccine — 모바일 보안 SDK 설계·운영</h3>
                 <span class="period">2019.04 — 현재</span>
             </div>
-            <div class="role">메인 담당 (Android/iOS SDK, App) · 라온시큐어</div>
-            <p class="desc">금융·공공기관에 납품하는 모바일 보안 SDK. 다양한 단말 환경에서 안정적으로 동작해야 하는 제품 특성상, 코드 품질·구조 개선과 성능 안정성이 핵심 과제였다.</p>
+            <div class="role">메인 담당 — 시스템 아키텍처 설계 + Android/iOS SDK + App · 라온시큐어</div>
+            <p class="desc">금융·공공기관 대상 모바일 보안 SDK. 진화하는 루팅/탈옥 기법에 대응하는 탐지 시스템을 설계하고, 공격 시뮬레이션으로 방어 로직을 검증하는 사이클을 주도했다.</p>
             <div class="career-product-content">
                 <div class="career-product-text">
                     <ul>
-                        <li>Magisk/RootHide 등 진화하는 루팅 기법 연구·분석 및 탐지 기능 개발. Frida를 활용한 우회 테스트로 탐지 로직 검증.</li>
-                        <li>경쟁사 보안 앱 리버스 엔지니어링(jadx, Ghidra)을 통한 탐지 로직 연구·벤치마킹.</li>
-                        <li>iOS 탈옥 탐지 기법 연구 및 탐지 모듈 개발.</li>
-                        <li>원격 탐지: 시스템, KNOX 등의 보안 정책(SandBox 등)을 우회하여 탐지하는 방법 개발.</li>
-                        <li>FakeCall, BankingTrojan 등 실제 공격 기법을 PoC로 구현하여 방어 로직 검증.</li>
-                        <li>보이스피싱 악성앱 실시간 탐지 기능 개발.</li>
-                        <li>NDK/JNI 기반 네이티브 모듈 개발. 시스템 레벨 탐지 로직 구현.</li>
-                        <li>Java→Kotlin 마이그레이션으로 코드 가독성과 유지보수성 향상.</li>
-                        <li>전체 아키텍처를 MVVM으로 리팩토링하여 테스트 가능성과 확장성 확보.</li>
-                        <li>WorkManager·Coroutines 기반 비동기·병렬 처리 설계. 초기 빈번했던 ANR과 메모리 릭을 JNI 레벨까지 추적·해결하여 현재 안정화.</li>
-                        <li>Unit Test 기반 SDK 품질 관리. Jenkins CI/CD를 통한 빌드·배포 자동화.</li>
-                        <li>Firebase 도입으로 원격 로그 수집·분석 체계 구축, 버그 대응 시간 단축.</li>
-                        <li>다양한 단말·OS 버전 환경에서의 호환성 대응.</li>
-                        <li>URL Scheme 기반 앱-웹 간 통신 기능 개발.</li>
-                        <li>플레이스토어 배포 및 업데이트 운영.</li>
+                        <li><strong>위협 모델링 → 탐지 설계:</strong> Magisk/RootHide 등 진화하는 루팅 기법을 분석하고, Frida 기반 우회 테스트로 탐지 로직을 검증하는 사이클을 운영.</li>
+                        <li><strong>탐지 → 대응 흐름:</strong> 악성앱/보이스피싱앱 탐지 → 위험 앱 리스트 노출 → 사용자가 직접 삭제를 선택하는 end-to-end 흐름 설계.</li>
+                        <li><strong>공격 시뮬레이션 기반 검증:</strong> FakeCall, BankingTrojan 등 실제 공격 기법을 PoC로 구현하여 방어 로직을 사전 검증.</li>
+                        <li><strong>시스템 레벨 탐지 아키텍처:</strong> NDK/JNI 기반 네이티브 모듈 설계. 시스템 보안 정책(SandBox) 경계를 분석하여 원격 탐지 기법 설계. KNOX 우회 환경 대응.</li>
+                        <li><strong>아키텍처 설계:</strong> MVVM 전환, WorkManager·Coroutines 기반 비동기 처리 설계. ANR·메모리 릭을 JNI 레벨(GlobalRef 릭, native allocation 미해제)까지 추적·해결.</li>
+                        <li><strong>SDK 호환성:</strong> Android 8~15, 주요 제조사(삼성·LG·샤오미 등) 대응. Reflection 활용으로 제조사·OS별 비공개 API 차이를 흡수하는 호환성 레이어 설계. 금융·공공기관 다수 납품.</li>
                     </ul>
                     <div class="tags">
-                        <span class="tag">Android SDK</span><span class="tag">Android NDK</span><span class="tag">iOS SDK</span><span class="tag">Kotlin</span><span class="tag">Coroutines</span><span class="tag">Java</span><span class="tag">C++</span><span class="tag">Objective-C</span><span class="tag">MVVM</span><span class="tag">WorkManager</span><span class="tag">Firebase</span><span class="tag">Frida</span><span class="tag">Ghidra</span><span class="tag">jadx</span><span class="tag">Jenkins</span>
+                        <span class="tag">Android SDK</span><span class="tag">Android NDK</span><span class="tag">iOS SDK</span><span class="tag">Kotlin</span><span class="tag">C++</span><span class="tag">Objective-C</span><span class="tag">Frida</span><span class="tag">Ghidra</span><span class="tag">jadx</span><span class="tag">MVVM</span><span class="tag">Firebase</span><span class="tag">Jenkins</span>
                     </div>
                     <a class="link" href="https://play.google.com/store/apps/details?id=com.TouchEn.mVaccine.webs" target="_blank">→ Google Play</a>
                 </div>
@@ -270,72 +807,21 @@
             </div>
         </div>
 
-        <!-- ★ 보안에서는 AI 프로젝트가 먼저 -->
-        <div class="project-card">
+        <!-- 라온 모바일 시큐리티 -->
+        <div class="project-card fade-in">
             <div class="project-card-header">
-                <h3>AI 기반 딥페이크 영상 탐지</h3>
-                <span class="period">2024.04 — 2024.12</span>
-            </div>
-            <div class="role">앱 개발 리드 / 모델 개발 서브 (6인 팀) · 라온시큐어</div>
-            <p class="desc">오픈소스 기반 딥페이크 탐지 모델을 모바일 보안 서비스에 응용. 앱 개발을 메인으로, 모델 추가 학습·튜닝을 서브로 담당.</p>
-            <ul>
-                <li>기존 모델의 동양인 탐지율 한계 확인, 직접 데이터 수집 후 추가 학습하여 정확도 95% 달성.</li>
-                <li>모바일 환경에서의 온디바이스 실시간 탐지를 위해 모델 양자화(Quantization) 연구 수행. 추론 속도 및 MediaProjection 화질 제약으로 실시간 탐지 불가 판단, 클라우드 기반 탐지 아키텍처로 전환 결정.</li>
-                <li>라온 모바일 시큐리티 앱(50만 다운로드)에 탑재.</li>
-            </ul>
-            <div class="tags">
-                <span class="tag">Android SDK</span><span class="tag">Kotlin</span><span class="tag">Python</span><span class="tag">PyTorch</span><span class="tag">i3d</span><span class="tag">ResNet</span>
-            </div>
-        </div>
-
-        <div class="project-card">
-            <div class="project-card-header">
-                <h3>AI 기반 보이스피싱 탐지 연구</h3>
-                <span class="period">2025.09 — 2025.12</span>
-            </div>
-            <div class="role">전체/모델 개발 리드 (3인 팀) · 라온시큐어</div>
-            <p class="desc">보이스피싱 통화를 AI로 실시간 탐지하는 연구. Recall 99.34%를 달성했으나 실서비스 투입 불가 판단.</p>
-            <ul>
-                <li>KoBERT 기반 모델로 Recall 99.34% 달성. FP Rate 22%로 실서비스 적용 시 사용자 경험을 저해할 수준이라 판단, 제품화 보류.</li>
-                <li>후속 방향으로 정상 대화 데이터 보강 및 Hard Negative Mining 전략을 제안.</li>
-            </ul>
-            <div class="tags">
-                <span class="tag">KoBERT</span><span class="tag">Python</span><span class="tag">NLP</span>
-            </div>
-        </div>
-
-        <div class="project-card">
-            <div class="project-card-header">
-                <h3>AI 기반 악성앱 탐지</h3>
-                <span class="period">2026.02 — 현재</span>
-            </div>
-            <div class="role">전체/모델 개발 리드 · 라온시큐어</div>
-            <p class="desc">기존 패턴 기반 악성앱 탐지의 한계를 넘어서기 위해, ML 모델 기반 탐지 시스템을 설계·개발 중.</p>
-            <ul>
-                <li>APK 정적 분석 기반 특징 추출 파이프라인 설계 및 ML 모델 학습 아키텍처 구축.</li>
-                <li>MLflow 기반 실험 추적, 모델 버전 관리, 성능 비교 MLOps 파이프라인 구축·운영 중.</li>
-            </ul>
-            <div class="tags">
-                <span class="tag">Python</span><span class="tag">PyTorch</span><span class="tag">MLflow</span><span class="tag">Android</span>
-            </div>
-        </div>
-
-        <div class="project-card">
-            <div class="project-card-header">
-                <h3>라온 모바일 시큐리티 앱 개발 및 운영</h3>
+                <h3>라온 모바일 시큐리티 — B2C 보안 앱 설계 및 운영</h3>
                 <span class="period">2021.07 — 현재</span>
             </div>
-            <div class="role">개발 및 운영, 주요 기술 의사결정 참여 · 라온시큐어</div>
-            <p class="desc">B2C 모바일 보안 서비스 앱. 10가지 이상 보안 기능을 하나의 앱에서 제공. 확장성을 고려해 현대적 Jetpack 스택을 도입.</p>
+            <div class="role">개발 및 운영, 기술 리드 · 라온시큐어</div>
+            <p class="desc">10가지 이상 보안 기능을 하나의 앱에서 제공하는 B2C 서비스. 50만 다운로드 앱의 기술 방향을 설계하며, 신규 기능 도입 시 아키텍처 전략을 주도했다.</p>
             <div class="career-product-content">
                 <div class="career-product-text">
                     <ul>
-                        <li>기능 설계 및 개발 주도. 신규 기능(딥페이크 탐지 등) 도입 시 기술 의사결정 담당.</li>
-                        <li>MVVM 리팩토링. 확장성을 고려해 Coroutines + Flow, Room, Hilt(DI)를 선제 도입.</li>
-                        <li>스미싱 문자 패턴화·정규화를 통한 실시간 탐지 기능 개발.</li>
-                        <li>Jetpack Compose 마이그레이션 계획 중.</li>
+                        <li>신규 보안 기능 도입 시 기술 리드. 딥페이크 탐지 탑재 시 앱-서버 간 통신 구조 설계.</li>
+                        <li>Coroutines + Flow, Room, Hilt(DI) 선제 도입 아키텍처 전환 설계.</li>
+                        <li>스미싱 문자 패턴화·정규화를 통한 실시간 탐지 기능 설계.</li>
                         <li>50만 다운로드, 1000명+ 평가, 평점 4.5 달성.</li>
-                        <li>플레이스토어 배포·업데이트 운영.</li>
                     </ul>
                     <div class="tags">
                         <span class="tag">Kotlin</span><span class="tag">Coroutines + Flow</span><span class="tag">Room</span><span class="tag">Hilt</span><span class="tag">MVVM</span><span class="tag">Firebase</span>
@@ -350,126 +836,38 @@
             </div>
         </div>
 
-        <div class="project-card">
+        <!-- 클라우드 전환 -->
+        <div class="project-card fade-in">
             <div class="project-card-header">
-                <h3>클라우드 서비스 전환</h3>
+                <h3>클라우드 서비스 전환 — 보안 서비스 아키텍처·과금 모델 재설계</h3>
                 <span class="period">2025.02 — 2025.10</span>
             </div>
             <div class="role">앱 개발 리드 (5인 팀) · 라온시큐어</div>
-            <p class="desc">기존 로컬 기반 보안 검사를 클라우드 기반으로 전환. 라이선스 기반 수익 구조에서 사용량 기반 과금 구조로의 전환을 목표로 설계.</p>
+            <p class="desc">로컬 기반 보안 검사에서 클라우드 기반으로의 아키텍처 전환을 설계. 기술 전환이자 비즈니스 모델 전환(라이선스 → 사용량 과금).</p>
+            <div class="decision-highlight">
+                <strong>설계 판단:</strong> 라이선스 기반에서 사용량 과금 모델로 전환 설계. 로컬 DB 용량 제약 제거로 탐지 패턴 DB 확장성 2배 이상 확보. 서버 비용 절감과 실제 사용 데이터 수집을 동시에 달성하는 구조 설계.
+            </div>
             <ul>
-                <li>URL Scheme 기반 호출에서 중앙 서버 통한 데이터 전달 방식으로 통신 아키텍처 전환.</li>
-                <li>로컬 DB 용량 제약 제거로 검사 가능한 악성앱 탐지 패턴 2배 이상 확장 가능한 구조로 설계.</li>
-                <li>기존 CDN 기반 패턴 배포 대비 서버 비용 절감.</li>
-                <li>실제 사용 횟수 기반 집계 및 통계 수집 구조 설계.</li>
+                <li>URL Scheme 기반 호출에서 중앙 서버 통신 아키텍처로의 전환 설계 및 구현.</li>
             </ul>
             <div class="tags">
-                <span class="tag">Android SDK</span><span class="tag">Java</span><span class="tag">Kotlin</span>
+                <span class="tag">Android SDK</span><span class="tag">Java</span><span class="tag">Kotlin</span><span class="tag">아키텍처 설계</span>
             </div>
         </div>
-    </section>
-</div>
 
-<!-- 기타 프로젝트 (통일) -->
-<div class="container">
-    <section id="others">
-        <div class="section-label">Other Projects</div>
-        <h2 class="section-title">기타 프로젝트</h2>
+        <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 1.5rem; margin-top: 3rem; padding-left: 0.2rem; letter-spacing: -0.01em;">사이드 프로젝트</h3>
 
-        <div class="project-card">
+        <!-- nworks -->
+        <div class="project-card fade-in">
             <div class="project-card-header">
-                <h3>TouchEn Transkey / mTranskey — Web SDK 개발 및 운영</h3>
-                <span class="period">2018.10 — 2021.07</span>
+                <h3>nworks — NAVER WORKS MCP 서버</h3>
+                <span class="period">1인 설계·개발 · 오픈소스</span>
             </div>
-            <div class="role">개발 및 운영 · 라온시큐어</div>
-            <p class="desc">웹 기반 보안 키보드 솔루션. 키 입력 보호 및 패턴 잠금 기능 제공. 금융·공공기관 대상.</p>
+            <div class="role">1인 설계·개발·배포</div>
+            <p class="desc">AI 에이전트가 NAVER WORKS(메일·캘린더·메시지 등)를 직접 호출할 수 있게 만든 CLI & MCP Server.</p>
             <ul>
-                <li>세션 미사용 통신 개발 (분산 시스템 및 보안 강화 목적).</li>
-                <li>반응형 웹 디자인 개발.</li>
-                <li>웹 접근성 심사 기준 준수 (공공·금융기관 장차법 요건).</li>
-                <li>RESTful API 설계·제공.</li>
-            </ul>
-            <div class="tags">
-                <span class="tag">JavaScript</span><span class="tag">Java Servlet</span><span class="tag">REST API</span>
-            </div>
-        </div>
-
-        <div class="project-card">
-            <div class="project-card-header">
-                <h3>TouchEn nxKey — macOS App 개발</h3>
-                <span class="period">2019.04 — 2021.09</span>
-            </div>
-            <div class="role">개발 · 라온시큐어</div>
-            <p class="desc">macOS용 보안 키보드 솔루션. 키 입력 후킹 및 보안 기능 제공.</p>
-            <ul>
-                <li>Hooking Daemon 개발: 키 입력을 실시간으로 후킹하여 보안 키보드 기능 구현.</li>
-                <li>macOS DriverKit을 사용하여 가상 키 발생 기능 개발.</li>
-            </ul>
-            <div class="tags">
-                <span class="tag">Objective-C</span><span class="tag">C++</span><span class="tag">macOS DriverKit</span>
-            </div>
-        </div>
-    </section>
-</div>
-
-<!-- 경력 (통일) -->
-<div class="container">
-    <section id="career">
-        <div class="section-label">Career</div>
-        <h2 class="section-title">경력</h2>
-        <div class="career-company">
-            <div class="career-company-header">
-                <h3>라온시큐어</h3>
-                <span class="period">2018.04 — 현재</span>
-            </div>
-            <div class="career-dept">AI 연구 2팀</div>
-            <ul class="career-timeline">
-                <li>AI 기반 악성앱 탐지 — 전체/모델 개발 리드<span class="timeline-period">2026.02 — 현재</span></li>
-                <li>클라우드 서비스 전환 — 앱 개발 리드 (5인 팀)<span class="timeline-period">2025.02 — 2025.10</span></li>
-                <li>AI 보이스피싱 탐지 연구 — 전체/모델 개발 리드 (3인 팀)<span class="timeline-period">2025.09 — 2025.12</span></li>
-                <li>AI 딥페이크 탐지 — 앱 개발 리드 / 모델 서브 (6인 팀)<span class="timeline-period">2024.04 — 2024.12</span></li>
-                <li>라온 모바일 시큐리티 앱 설계·운영<span class="timeline-period">2021.07 — 현재</span></li>
-                <li>TouchEn mVaccine (Android/iOS SDK) 메인 담당<span class="timeline-period">2019.04 — 현재</span></li>
-                <li>TouchEn nxKey (macOS) 개발<span class="timeline-period">2019.04 — 2021.09</span></li>
-                <li>TouchEn Transkey / mTranskey (Web SDK) 개발·운영<span class="timeline-period">2018.10 — 2021.07</span></li>
-            </ul>
-        </div>
-    </section>
-</div>
-
-<!-- ★ SECURITY SIDE PROJECT ORDER: aiignore first -->
-<div class="container">
-    <section id="projects">
-        <div class="section-label">Side Projects</div>
-        <h2 class="section-title">사이드 프로젝트</h2>
-
-        <div class="career-product">
-            <div class="career-product-header">
-                <h4>aiignore-cli</h4>
-                <span class="period">1인 개발 · 오픈소스</span>
-            </div>
-            <p class="role-desc">AI 코딩 도구용 ignore 파일 생성 CLI · npm 배포</p>
-            <ul>
-                <li>.gitignore처럼 주요 AI 코딩 도구(Cursor, Claude Code 등)의 ignore 파일을 자동 생성.</li>
-                <li>바이브 코딩 시 private key 등 민감 정보가 AI에 노출되는 것을 방지. 보안 엔지니어 관점에서 개발.</li>
-            </ul>
-            <div class="tags">
-                <span class="tag">TypeScript</span><span class="tag">Node.js</span><span class="tag">npm</span><span class="tag">Security</span>
-            </div>
-            <a class="link" href="https://github.com/yjcho9317/aiignore-cli" target="_blank">→ GitHub</a>
-            <a class="link" href="https://www.npmjs.com/package/aiignore-cli" target="_blank">→ npm</a>
-        </div>
-
-        <div class="career-product">
-            <div class="career-product-header">
-                <h4>nworks</h4>
-                <span class="period">1인 개발 · 오픈소스</span>
-            </div>
-            <p class="role-desc">NAVER WORKS CLI & MCP Server · npm 배포</p>
-            <ul>
-                <li>NAVER WORKS API를 CLI와 MCP 서버로 래핑한 오픈소스 도구.</li>
-                <li>awesome-mcp-servers 등록(PR 머지), Glama AAA 인증 달성.</li>
-                <li>다국어 README(EN/KO/JA), npm 배포, Docker 지원.</li>
+                <li>NAVER WORKS API를 MCP 프로토콜로 래핑. Service Account vs User OAuth 인증 구조 설계, 에이전트 호출 흐름 정의.</li>
+                <li>awesome-mcp-servers 머지(PR #3202), Glama 등록(코드 품질 A등급). 다국어 README(EN/KO/JA), npm 배포.</li>
             </ul>
             <div class="tags">
                 <span class="tag">TypeScript</span><span class="tag">Node.js</span><span class="tag">MCP</span><span class="tag">npm</span>
@@ -478,23 +876,41 @@
             <a class="link" href="https://www.npmjs.com/package/nworks" target="_blank">→ npm</a>
         </div>
 
-        <div class="career-product">
-            <div class="career-product-header">
-                <h4>셀카픽</h4>
-                <span class="period">1인 개발 · 배포 중</span>
+        <!-- aiignore-cli -->
+        <div class="project-card fade-in">
+            <div class="project-card-header">
+                <h3>aiignore-cli — AI 코딩 도구용 ignore 생성기</h3>
+                <span class="period">1인 설계·개발 · 오픈소스</span>
             </div>
-            <p class="role-desc">기획 · 개발 · 배포 · 운영 · ML Kit 기반 얼굴 유사도 분석 앱</p>
+            <div class="role">1인 설계·개발·배포</div>
+            <p class="desc">AI 코딩 도구(Cursor, Claude Code 등) 사용 시 민감 정보 노출을 방지하는 ignore 파일 생성 CLI.</p>
+            <ul>
+                <li>AI 코딩 도구의 프로젝트 컨텍스트 노출 문제를 식별하고, .gitignore 스타일로 ignore 파일을 자동 생성.</li>
+            </ul>
+            <div class="tags">
+                <span class="tag">TypeScript</span><span class="tag">Node.js</span><span class="tag">npm</span><span class="tag">Security</span>
+            </div>
+            <a class="link" href="https://github.com/yjcho9317/aiignore-cli" target="_blank">→ GitHub</a>
+            <a class="link" href="https://www.npmjs.com/package/aiignore-cli" target="_blank">→ npm</a>
+        </div>
+
+        <!-- 셀카픽 -->
+        <div class="project-card fade-in">
+            <div class="project-card-header">
+                <h3>셀카픽 — ML 기반 유사 사진 분석 앱</h3>
+                <span class="period">1인 기획·설계·배포 · 운영 중</span>
+            </div>
+            <div class="role">1인 기획·설계·배포</div>
+            <p class="desc">ML Kit 기반 얼굴 유사도 분석 앱. Google Play 배포.</p>
             <div class="career-product-content">
                 <div class="career-product-text">
                     <ul>
-                        <li>사진첩에서 유사한 셀카를 자동으로 묶어주고 베스트샷을 추천.</li>
-                        <li>ML Kit Face Detection으로 얼굴 특징 추출, 유사도 점수 산출.</li>
+                        <li>ML Kit Face Detection 기반 유사도 점수 산출 알고리즘 설계.</li>
                         <li>유사도 임계값 조정에 따른 정확도-오탐률 트레이드오프 경험.</li>
-                        <li>Google AdMob 광고 연동.</li>
                         <li>기획부터 스토어 배포까지 단독 진행.</li>
                     </ul>
                     <div class="tags">
-                        <span class="tag">Kotlin</span><span class="tag">Coroutines</span><span class="tag">Jetpack Compose</span><span class="tag">MVVM</span><span class="tag">ML Kit</span><span class="tag">AdMob</span>
+                        <span class="tag">Kotlin</span><span class="tag">Jetpack Compose</span><span class="tag">MVVM</span><span class="tag">ML Kit</span><span class="tag">AdMob</span>
                     </div>
                     <a class="link" href="https://play.google.com/store/apps/details?id=com.yjcho.aiphotocleaner" target="_blank">→ Google Play</a>
                 </div>
@@ -505,15 +921,91 @@
                 </div>
             </div>
         </div>
+
+    </section>
+</div>
+
+<!-- 기타 프로젝트 -->
+<div class="container">
+    <section id="others" class="fade-in">
+        <div class="section-label">Other Projects</div>
+        <h2 class="section-title">기타 프로젝트</h2>
+
+        <div class="project-card fade-in">
+            <div class="project-card-header">
+                <h3>TouchEn Transkey / mTranskey — Web 보안 키보드 설계·운영</h3>
+                <span class="period">2018.10 — 2021.07</span>
+            </div>
+            <div class="role">개발 및 운영 · 라온시큐어</div>
+            <p class="desc">웹 기반 보안 키보드 솔루션. 금융·공공기관 대상 키 입력 보호 시스템.</p>
+            <ul>
+                <li>세션 미사용 통신 설계 (분산 시스템 환경 보안 강화 목적).</li>
+                <li>웹 접근성 심사 기준 준수 (공공·금융기관 장차법 요건).</li>
+                <li>RESTful API 설계·제공.</li>
+            </ul>
+            <div class="tags">
+                <span class="tag">JavaScript</span><span class="tag">Java Servlet</span><span class="tag">REST API</span>
+            </div>
+        </div>
+
+        <div class="project-card fade-in">
+            <div class="project-card-header">
+                <h3>TouchEn nxKey — macOS 보안 키보드 개발</h3>
+                <span class="period">2019.04 — 2021.09</span>
+            </div>
+            <div class="role">개발 · 라온시큐어</div>
+            <p class="desc">macOS용 보안 키보드 솔루션. 키 입력 후킹 및 보안 기능 제공.</p>
+            <ul>
+                <li>Hooking Daemon 설계: 키 입력을 실시간으로 후킹하여 보안 키보드 기능 구현.</li>
+                <li>macOS DriverKit 기반 가상 키 발생 시스템 설계·구현.</li>
+            </ul>
+            <div class="tags">
+                <span class="tag">Objective-C</span><span class="tag">C++</span><span class="tag">macOS DriverKit</span>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- 경력 -->
+<div class="container">
+    <section id="career" class="fade-in">
+        <div class="section-label">Career</div>
+        <h2 class="section-title">경력</h2>
+        <div class="career-company">
+            <div class="career-company-header">
+                <h3>라온시큐어</h3>
+                <span class="period">2018.04 — 현재</span>
+            </div>
+            <div class="career-dept">AI 연구 2팀</div>
+            <ul class="career-timeline">
+                <li>AI 기반 악성앱 탐지 시스템 설계 — 전체/모델 개발 리드<span class="timeline-period">2026.02 — 현재</span></li>
+                <li>클라우드 아키텍처 전환 설계 — 앱 개발 리드 (5인 팀)<span class="timeline-period">2025.02 — 2025.10</span></li>
+                <li>AI 보이스피싱 탐지 — 전체/모델 개발 리드 (3인 팀) (클라우드 전환과 병행)<span class="timeline-period">2025.09 — 2025.12</span></li>
+                <li>AI 딥페이크 탐지 — 앱 개발 리드 / 모델 서브 (6인 팀)<span class="timeline-period">2024.04 — 2024.12</span></li>
+                <li>B2C 보안 앱 설계·운영 — 기술 리드<span class="timeline-period">2021.07 — 현재</span></li>
+                <li>디바이스 무결성 검증 시스템 (TouchEn mVaccine) 메인 담당<span class="timeline-period">2019.04 — 현재</span></li>
+                <li>TouchEn nxKey (macOS) 보안 키보드 설계·개발<span class="timeline-period">2019.04 — 2021.09</span></li>
+                <li>TouchEn Transkey / mTranskey (Web SDK) 개발·운영<span class="timeline-period">2018.10 — 2021.07</span></li>
+            </ul>
+        </div>
+    </section>
+</div>
+
+<!-- 학력 -->
+<div class="container">
+    <section id="education" class="fade-in">
+        <div class="section-label">Education</div>
+        <h2 class="section-title">학력</h2>
+        <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.7;">신한대학교 | 컴퓨터공학 전공 | 2018.08 졸업</p>
     </section>
 </div>
 
 <div class="container">
-    <section id="contact">
+    <section id="contact" class="fade-in">
         <div class="section-label">Contact</div>
         <h2 class="section-title">연락처</h2>
         <div class="hero-contact">
-            <a href="mailto:yjcho9317@gmail.com">yjcho9317@gmail.com</a>
+            <a href="/cdn-cgi/l/email-protection#b4cdded7dcdb8d878583f4d3d9d5ddd89ad7dbd9"><span class="__cf_email__" data-cfemail="6f16050c0700565c5e582f08020e0603410c0002">[email&#160;protected]</span></a>
             <a href="https://github.com/yjcho9317" target="_blank">GitHub</a>
             <a href="https://yjcho9317.tistory.com/" target="_blank">Tistory</a>
             <a href="https://velog.io/@yjcho9317" target="_blank">Velog</a>
@@ -522,6 +1014,23 @@
     </section>
 </div>
 
-<footer><div class="container">© 2026 조영진</div></footer>
-</body>
-</html>
+<footer>
+    <div class="container">© 2026 조영진</div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(function(el) {
+        observer.observe(el);
+    });
+});
+</script>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.m
